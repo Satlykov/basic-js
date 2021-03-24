@@ -8,24 +8,18 @@ module.exports = function transform(arr = []) {
   let newArr = [];
 
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i] !== '--discard-prev' || arr[i] !== '--double-next' || arr[i] !== '--double-prev') {
+    if (arr[i] !== '--discard-prev' || arr[i] !== '--double-next' || arr[i] !== '--double-prev' || arr[i] !== '--discard-next') {
       newArr.push(arr[i]);
     } else if (arr[i] == '--discard-prev') {
       newArr.pop();
     } else if (arr[i] == '--double-next') {
       newArr.push(arr[i + 1]);
     } else if (arr[i] == '--double-prev') {
-      newArr.push(arr[i - 1]);
+        newArr.push(arr[i - 1]);
+    } else if (newArr[i] == '--discard-next') {
+      i++
     } else {throw new Error('Not one of the options')}
   }
 
-  for (let n = newArr.length; n > 0; n--) {
-    if (newArr[i] == '--discard-next') {
-      newArr.splice(i, 2);
-    } 
-  }
-
-
-
-return newArr;
+  return newArr;
 }
