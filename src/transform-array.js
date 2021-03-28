@@ -8,28 +8,26 @@ module.exports = function transform(arr = []) {
   for (let i = 0; i < arr.length; i++) {
     switch (arr[i]) {
       case "--discard-prev":
-        if (newArr.length !== 0) {
+        if (arr[i - 2] !== '--discard-next') {
           newArr.pop();
         }
         break;
 
       case "--discard-next":
-        if (i < newArr.length) {
-          i++;
-        }
+        i++;
         break;
 
       case "--double-next":
-        if (i < newArr.length) {
+        if (arr[i + 1] !== undefined) {
           newArr.push(arr[i + 1]);
         }
         break;
 
       case "--double-prev":
-        if (arr[i - 2] == "--discard-next") {
-          newArr.pop();
-        } else if (newArr.length !== 0) {
-          newArr.push(arr[i - 1]);
+        if (arr[i - 2] !== "--discard-next") {
+         if (arr[i - 1] !== undefined) {
+           newArr.push(arr[i - 1]);
+         } 
         }
         break;
 
