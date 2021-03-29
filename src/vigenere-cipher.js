@@ -1,7 +1,8 @@
 const CustomError = require("../extensions/custom-error");
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const rectangle = [
+
+const tabulaRecta = [
   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
   ['B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A'],
   ['C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B'],
@@ -41,19 +42,19 @@ class VigenereCipheringMachine {
   encrypt(message, key) {
     if (message === undefined || key === undefined) throw new Error('Lack of arguments!');
 
-    const messageUC = message.toUpperCase();
     const keyUC = key.toUpperCase();
+    const keyUCDried = keyUC.replace(/\s/g, '');
 
-    const messageUCTrim = messageUC.trim();
-    const keyUCReplace = keyUC.replace(/\s/g, '');
+    const messageUC = message.toUpperCase();
+    const messageUCDried  = messageUC.trim();
     
-    const messageLength = messageUCTrim.length;
-    const keyLength = keyUCReplace.length;
-
     const res = [];
+    
+    const keyLength = keyUCDried.length;
+    const messageLength = messageUCDried.length;
 
-    for (let i = 0, n =0; i < messageLength; i += 1, n += 1) {
-      const messageChar = messageUCTrim[i];
+    for (let i = 0, n = 0; i < messageLength; i += 1, n += 1) {
+      const messageChar = messageUCDried[i];
       if(!~alphabet.indexOf(messageChar)) {
         res.push(messageChar);
         n--;
@@ -61,48 +62,49 @@ class VigenereCipheringMachine {
       }
       const  messageCharCode = messageChar.charCodeAt(0);
 
-      const shiftedRowIndex = keyUCReplace.charCodeAt(n % keyLength) - START_POSITION_CHARCODE;
+      const shiftedRowIndex = keyUCDried.charCodeAt(n % keyLength) - START_POSITION_CHARCODE;
       const shiftedCharIndex = messageCharCode - START_POSITION_CHARCODE;
-      res.push(rectangle[shiftedRowIndex][shiftedCharIndex]);
+      res.push(tabulaRecta[shiftedRowIndex][shiftedCharIndex]);
     }
     if (this._reverseFlag === true) return res.reverse().join('');
     return res.join('');
   }   
 
-  decrypt(encryptMessage, key) {
-    if (encryptMessage === undefined || key === undefined) throw new Error('Lack of arguments!');
+  decrypt(encryptedMessage, key) {
+    if (encryptedMessage === undefined || key === undefined) throw new Error('Lack of arguments!');
 
-    const encryptMessageUC = message.toUpperCase();
     const keyUC = key.toUpperCase();
+    const keyUCDried = keyUC.replace(/\s/g, '');
 
-    const encryptedMessageUCTrim = encryptMessageUC.trim();
-    const keyUCReplace = keyUC.replace(/\s/g, '');
+    const encryptedMessageUC = encryptedMessage.toUpperCase();
+    const encryptedMessageUCDried  = encryptedMessageUC.trim();
     
-    const messageLength = messageUCTrim.length;
-    const keyLength = encryptedMessageUCTrim.length;
+    const keyLength = keyUCDried.length;
+    const messageLength = encryptedMessageUCDried.length;
 
     const res = [];
 
     for (let i = 0, n =0; i < messageLength; i++, n++) {
-      let encryptedMessageChar = encryptedMessageUCTrim[i];
+      let encryptedMessageChar = encryptedMessageUCDried[i];
 
-      const rowIndex = keyUCReplace.charCodeAt(n % keyLength) - START_POSITION_CHARCODE;
+      const rowIndex = keyUCDried.charCodeAt(n % keyLength) - START_POSITION_CHARCODE;
 
-      const row = rectangle[rowIndex];
+      const row = tabulaRecta[rowIndex];
 
       if(!~alphabet.indexOf(encryptedMessageChar)) {
         res.push(encryptedMessageChar);
         n--;
         continue;
       }
+
       const targetIndex = row.indexOf(encryptedMessageChar);
-      const unshiftedRow = rectangle[0];
+      const unshiftedRow = tabulaRecta[0];
       const trueChar = unshiftedRow[targetIndex];
 
       res.push(trueChar);
     }
     if (this._reverseFlag === true) return res.reverse().join('');
-    return res.join('');
+    return res.join(''); 
   }
 }
 
