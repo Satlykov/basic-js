@@ -15,6 +15,5 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function isMAC48Address(str) {
-  const regex = /[a-fA-F0-9]/gm
-  return str.match(regex);
+  throw new NotImplementedError('Not implemented');
 }
