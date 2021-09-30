@@ -15,5 +15,6 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function isMAC48Address(str) {
-  throw new NotImplementedError('Not implemented');
+  let isMacAddress = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(str)
+  return isMacAddress;
 }
