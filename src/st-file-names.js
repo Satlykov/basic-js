@@ -1,4 +1,4 @@
-import { NotImplementedError } from '../extensions/index.js';
+import { NotImplementedError } from "../extensions/index.js";
 
 /**
  * There's a list of file, since two files cannot have equal names,
@@ -16,6 +16,27 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function renameFiles(arr) {
-  throw new NotImplementedError('Not implemented');
+    if (arr == []) return [];
+    let newArr = [];
+    let set = new Set(arr);
+    let obj = {};
 
+    for (let num of set) {
+        obj[num] = 0;
+    }
+
+    arr.map((el) => {
+        if (obj[el] == 0) {
+            obj[el]++;
+            if (newArr.indexOf(el) == -1) {
+                newArr.push(`${el}`);
+            } else {
+                newArr.push(`${el}(${obj[el]})`);
+            }
+        } else if (obj[el] > 0) {
+            newArr.push(`${el}(${obj[el]})`);
+            obj[el]++;
+        }
+    });
+  return newArr;
 }
